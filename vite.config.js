@@ -31,6 +31,21 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    cssCodeSplit: true,
+    minify: 'esbuild',
+    //target: 'esnext',
+
+    target: 'es2017', //para hacer compatible con dispositivos viejos
+
+    //outDir: BUILD_DIR,
+    assetsInlineLimit: 0,
+    emptyOutDir: true,
+  },
+
+  esbuild: {
+    keepNames: true, // 🔥 mantiene nombres de funciones y clases
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

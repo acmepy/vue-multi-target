@@ -1,6 +1,6 @@
-cordova*
-build
 package-lock.json
+cordova/www/*
+
 # Logs
 logs
 *.log
