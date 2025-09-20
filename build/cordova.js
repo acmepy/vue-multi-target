@@ -13,7 +13,7 @@ const cordovaPackage = '../cordova/package.json'
 const updConfig = async () => {
   let conf = readFileSync(cordovaConfig, 'utf8')
   conf = conf.split(/\r?\n/)
-  conf[1] = conf[1].replace(/id="(\w.\S+)"/, `id="${data.appId}"`).replace(/version="(\d.\S+)"/, data.version)
+  conf[1] = conf[1].replace(/id="(\w.\S+)"/, `id="${data.appId}"`).replace(/version="(\d.\S+)"/, `version="${data.version}"`)
   conf[2] = conf[2].replace(/<name>(\w+)<\/name>/, `<name>${data.appName}</name>`)
   conf[3] = conf[3].replace(/<description>[\w\s]+<\/description>/, `<description>${data.description}</description>`)
   writeFileSync(cordovaConfig, conf.join(EOL))

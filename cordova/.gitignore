@@ -1,5 +1,7 @@
 res
-www/*
+www/assets
+www/icon
+www/img
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one
