@@ -1,6 +1,9 @@
 {
   "name": "vue-vite-pwa",
-  "version": "0.0.0",
+  "appId": "com.acmepy.vue",
+  "appName": "Vue",
+  "version": "0.0.1",
+  "description": "Vue Template",
   "private": true,
   "type": "module",
   "engines": {
@@ -12,7 +15,10 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "generate-assets": "pwa-assets-generator --preset minimal-2023 ./public/icon.svg && cd ./build && node generate-assets.js"
+    "generate-assets": "pwa-assets-generator --preset minimal-2023 ./public/icon.svg && cd ./build && node generate-assets.js",
+    "build-cordova": "cd ./build && node cordova.js && cd ../cordova && cordova build",
+    "start-android": "cd ./build && node cordova.js && cd ../cordova && cordova run android",
+    "build-electron": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron &&  npm run make"
   },
   "dependencies": {
     "pinia": "^3.0.3",
@@ -30,6 +36,7 @@
     "globals": "^16.3.0",
     "jimp": "^1.6.0",
     "prettier": "3.6.2",
+    "shx": "^0.4.0",
     "vite": "^7.0.6",
     "vite-plugin-pwa": "^1.0.3",
     "vite-plugin-vue-devtools": "^8.0.0"

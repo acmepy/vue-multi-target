@@ -31,6 +31,7 @@ export default defineConfig({
       },
     }),
   ],
+  base: './',
   build: {
     cssCodeSplit: true,
     minify: 'esbuild',
@@ -42,6 +43,7 @@ export default defineConfig({
     assetsInlineLimit: 0,
     emptyOutDir: true,
   },
+
 
   esbuild: {
     keepNames: true, // 🔥 mantiene nombres de funciones y clases
