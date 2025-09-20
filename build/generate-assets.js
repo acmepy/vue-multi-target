@@ -4,9 +4,9 @@ import path from 'path'
 import { copy, remove } from 'fs-extra'
 
 const electronAssets = async () => {
-  fs.mkdirSync('../electron/icon', { recursive: true })
-  remove('../electron/icon/cordova.png')
-  copy('../public/pwa-512x512.png', '../electron/icon/cordova.png')
+  fs.mkdirSync('../electron/src/icon', { recursive: true })
+  remove('../electron/src/icon/cordova.png')
+  copy('../public/pwa-512x512.png', '../electron/src/icon/cordova.png')
 }
 const outDir = '../cordova/res'
 const [outDirIco, outDirScr] = [outDir + '/icon/android', outDir + '/screen/android']

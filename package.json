@@ -18,7 +18,8 @@
     "generate-assets": "pwa-assets-generator --preset minimal-2023 ./public/icon.svg && cd ./build && node generate-assets.js",
     "build-cordova": "cd ./build && node cordova.js && cd ../cordova && cordova build",
     "start-android": "cd ./build && node cordova.js && cd ../cordova && cordova run android",
-    "build-electron": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron &&  npm run make"
+    "build-electron": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron &&  npm run make",
+    "init": "npm install && npm run generate-assets && cd ./cordova && cordova platform add android && cd ../electron && npm install"
   },
   "dependencies": {
     "pinia": "^3.0.3",
