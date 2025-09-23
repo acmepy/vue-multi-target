@@ -6,7 +6,6 @@ import { Icon } from '@iconify/vue';
 
 <template>
   <header>
-    <!--img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /-->
     <Icon icon="devicon:vuejs" class="logo" width="125" height="125" aria-label="Vue logo" />
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
