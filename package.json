@@ -24,6 +24,7 @@
     "build-all": "npm run build && npm run build-cordova && npm run build-electron"
   },
   "dependencies": {
+    "@iconify/vue": "^5.0.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
