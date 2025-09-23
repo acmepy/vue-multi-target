@@ -1,6 +1,7 @@
-# vue-vite-pwa
+# vue-multi-target
 
 This template should help get you started developing with Vue 3 in Vite.
+pwa, cordova, electron
 
 ## Recommended IDE Setup
 
@@ -39,5 +40,3 @@ npm run build
 ```sh
 npm run lint
 ```
-
-##Guia https://alexop.dev/posts/create-pwa-vue3-vite-4-steps/
