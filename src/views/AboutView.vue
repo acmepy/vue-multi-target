@@ -1,6 +1,11 @@
+<script setup>
+import { useAboutStore } from '@/stores/about';
+const store = useAboutStore()
+store.load();
+</script>
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>{{ store.data }}</h1>
   </div>
 </template>
 
