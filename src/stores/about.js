@@ -1,28 +1,14 @@
 import { defineStore } from 'pinia'
 import { open, getAll, add /*, update, remove */ } from '@/db'
-//import { openLocalSave } from '@/db'
-//const localSave = openLocalSave()
 
 export const useAboutStore = defineStore('about', {
   state: () => ({
     data: { text: '' },
   }),
   actions: {
-    async donwload() {
-      console.log('download', 'init')
-      this.data = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(dataDown.data)
-        }, 1500)
-      })
-      await add('about', this.data)
-    },
     async load() {
       await open()
       this.data = await getAll('about')
-      if (this.data.length == 0) {
-        this.donwload()
-      }
     },
 
     async add(data) {
@@ -43,5 +29,3 @@ export const useAboutStore = defineStore('about', {
     },*/
   },
 })
-
-const dataDown = { data: { id: 0, text: 'This is an about page' } }
