@@ -3,7 +3,6 @@ import catalogo from '@/db/catalogo'
 
 let db
 
-// inicializamos la base solo una vez
 export async function open() {
   if (!db) {
     db = await openDB('vue', 1, {
@@ -22,7 +21,6 @@ export async function open() {
 }
 
 export async function getAll(catalogo) {
-  console.log('getAll', catalogo)
   return await db.getAll(catalogo)
 }
 
@@ -31,12 +29,10 @@ export async function get(catalogo, id) {
 }
 
 export async function add(catalogo, data) {
-  console.log('add', catalogo, data)
   if (!Array.isArray(data)) {
     data = [data]
   }
   for (const d of data) {
-    console.log('add loop', d.id)
     await db.put(catalogo, { ...d })
   }
 }

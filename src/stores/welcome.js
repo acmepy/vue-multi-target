@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia'
 import { open, getAll, add, update, remove } from '@/db'
-//import { openLocalSave } from '@/db'
-//const localSave = openLocalSave()
-await open()
 
 export const useWelcomeStore = defineStore('welcome', {
   state: () => ({
@@ -25,6 +22,7 @@ export const useWelcomeStore = defineStore('welcome', {
       }, 1000)
     },
     async load() {
+      await open()
       this.data = await getAll('welcome')
       if (this.data.length == 0) {
         this.donwload()

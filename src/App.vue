@@ -2,11 +2,17 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { Icon } from '@iconify/vue';
+import { resetStors } from './stores';
+
+function resetStors1() {
+  resetStors();
+}
 </script>
 
 <template>
   <header>
     <Icon icon="devicon:vuejs" class="logo" width="125" height="125" aria-label="Vue logo" />
+    <button @click="resetStors1">Reset Stors </button>
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <nav>

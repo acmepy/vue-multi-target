@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { open, getAll, add /*, update, remove */ } from '@/db'
 //import { openLocalSave } from '@/db'
 //const localSave = openLocalSave()
-await open()
 
 export const useAboutStore = defineStore('about', {
   state: () => ({
@@ -13,15 +12,15 @@ export const useAboutStore = defineStore('about', {
       console.log('download', 'init')
       this.data = await new Promise((resolve) => {
         setTimeout(() => {
-          console.log('download', dataDown.data)
           resolve(dataDown.data)
         }, 1500)
       })
       await add('about', this.data)
     },
     async load() {
+      await open()
       this.data = await getAll('about')
-      if (this.data.text != '') {
+      if (this.data.length == 0) {
         this.donwload()
       }
     },

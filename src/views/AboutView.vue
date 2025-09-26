@@ -1,11 +1,11 @@
 <script setup>
-import { useAboutStore } from '@/stores/about';
+import { useAboutStore } from '@/stores';
 const store = useAboutStore()
 store.load();
 </script>
 <template>
   <div class="about">
-    <h1>{{ store.data.text }}</h1>
+    <h1>{{ store.data[0]?.text }}</h1>
   </div>
 </template>
 
