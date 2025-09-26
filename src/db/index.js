@@ -5,7 +5,6 @@ let _db
 let _api
 
 export async function open(api = 'localhost:3000/api/') {
-  console.log(api)
   if (!_api) {
     _api = api
   }
