@@ -5,7 +5,7 @@ store.load();
 </script>
 <template>
   <div class="about">
-    <h1>{{ store.data }}</h1>
+    <h1>{{ store.data.text }}</h1>
   </div>
 </template>
 

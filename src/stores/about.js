@@ -1,26 +1,48 @@
 import { defineStore } from 'pinia'
-import { openLocalSave } from '@/db'
-
-const localSave = openLocalSave()
+import { open, getAll, add /*, update, remove */ } from '@/db'
+//import { openLocalSave } from '@/db'
+//const localSave = openLocalSave()
+await open()
 
 export const useAboutStore = defineStore('about', {
   state: () => ({
-    data: '',
+    data: { text: '' },
   }),
-  getters: {
-    getData: (state) => state.data,
-  },
   actions: {
-    async save({ key = 'about', value }) {
-      await localSave.set('aboutData', key, value)
+    async donwload() {
+      console.log('download', 'init')
+      this.data = await new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('download', dataDown.data)
+          resolve(dataDown.data)
+        }, 1500)
+      })
+      await add('about', this.data)
     },
     async load() {
-      let local = await localSave.get('aboutData', 'about')
-      if (!local || !local.data) {
-        await this.save({ value: 'This is an about page' })
-        local = await localSave.get('aboutData', 'about')
+      this.data = await getAll('about')
+      if (this.data.text != '') {
+        this.donwload()
       }
-      this.data = local.data
     },
+
+    async add(data) {
+      await add('about', data)
+      this.data.push(data)
+    },
+
+    /*async update(id, updates) {
+      const updated = await update('welcome', id, updates)
+      // reflejar en el estado de Pinia
+      const idx = this.products.findIndex((p) => p.id === id)
+      if (idx !== -1) this.products[idx] = updated
+    },
+
+    async remove(id) {
+      await remove('products', id)
+      this.products = this.products.filter((p) => p.id !== id)
+    },*/
   },
 })
+
+const dataDown = { data: { id: 0, text: 'This is an about page' } }
