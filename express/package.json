@@ -1,0 +1,24 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "description": "test notifiaciones push",
+  "main": "api.js",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon --delay 2 src/api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hugo",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "cross-env": "^10.0.0",
+    "nodemon": "^3.1.10"
+  }
+}
