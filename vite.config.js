@@ -12,15 +12,25 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
+      injectManifest: {
+        swSrc: 'src/sw.js', // 👉 archivo fuente
+        swDest: 'dist/sw.js', // 👉 archivo generado
+      },
+      injectRegister: false,
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt'],
       manifest: {
         name: 'vue-vite-pwa',
         short_name: 'vue-vite-pwa',
+        start_url: '/app/',
+        display: 'standalone',
         lang: 'es',
         icons: [
           {
-            src: '/pwa-192x192.png',
+            src: '/app/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
