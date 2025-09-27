@@ -13,7 +13,6 @@ export async function open(api = 'localhost:3000/api/') {
       upgrade(db) {
         for (const c of catalogo) {
           if (!db.objectStoreNames.contains(c.name)) {
-            console.log('db creando', c.name)
             db.createObjectStore(c.name, c.key)
           }
         }

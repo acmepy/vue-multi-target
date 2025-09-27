@@ -1,4 +1,5 @@
 import './assets/main.css'
+import { subscribeToPush } from './utils/push'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -12,3 +13,5 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
+subscribeToPush()

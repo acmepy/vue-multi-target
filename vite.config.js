@@ -12,6 +12,8 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'robots.txt'],
       manifest: {
         name: 'vue-vite-pwa',
         short_name: 'vue-vite-pwa',
@@ -29,6 +31,9 @@ export default defineConfig({
           },
         ],
       },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      },
     }),
   ],
   base: './',
@@ -43,7 +48,6 @@ export default defineConfig({
     assetsInlineLimit: 0,
     emptyOutDir: true,
   },
-
 
   esbuild: {
     keepNames: true, // 🔥 mantiene nombres de funciones y clases
