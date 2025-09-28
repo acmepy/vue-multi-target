@@ -4,10 +4,10 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import webpush from 'web-push'
 
-import path from 'path'
-import { fileURLToPath } from 'url'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+//import path from 'path'
+//import { fileURLToPath } from 'url'
+//const __filename = fileURLToPath(import.meta.url)
+//const __dirname = path.dirname(__filename)
 
 const app = express()
 app.use(cors())
@@ -20,6 +20,10 @@ const subscriptions = []
 app.get('/', (req, res) => {
   res.json({ message: 'Notificaciones push.' })
 })
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile('c:/tmp/vue/vue-multi-target/dist/favicon.ico')
+})
+
 /*app.get('/pwa-192x192.png', (req, res) => {
   res.sendFile('c:/tmp/vue/vue-multi-target/dist/pwa-192x192.png')
 })*/
@@ -29,7 +33,11 @@ app.get('/app/', (req, res) => {
 })
 
 app.post('/subscribe', (req, res) => {
-  subscriptions.push(req.body)
+  const sub = req.body
+  const exists = subscriptions.find((s) => s.endpoint === sub.endpoint)
+  if (!exists) {
+    subscriptions.push(req.body)
+  }
   console.log('iniciando suscripcion', subscriptions.length)
   res.status(201).json({})
 })
