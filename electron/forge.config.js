@@ -1,8 +1,10 @@
-const { FusesPlugin } = require('@electron-forge/plugin-fuses')
-const { FuseV1Options, FuseVersion } = require('@electron/fuses')
-const { appName, version } = require('../package.json')
+import { FusesPlugin } from '@electron-forge/plugin-fuses'
+import { FuseV1Options, FuseVersion } from '@electron/fuses'
+//import { appName, version } = require('../package.json')
+import pkg from '../package.json' with { type: 'json' }
+const { appName, version } = pkg
 
-module.exports = {
+export default {
   packagerConfig: {
     asar: true,
     icon: './src/icon/electron.ico',

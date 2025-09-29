@@ -1,12 +1,20 @@
-const { app, BrowserWindow, Notification } = require('electron')
-const path = require('node:path')
+import { app, BrowserWindow, Notification } from 'electron'
+import path from 'node:path'
 
-const squirrelEvent = require('./js/squirrel-events.js')
+import squirrelEvent from './js/squirrel-events.js'
 //const actualizar = require('./js/updater.js')
 //const Tray = require('./tray.js');
-const Notificacion = require('./js/notificacion.js')
+import Notificacion from './js/notificacion.js'
+import { suscribe } from './electron-notifications.js'
 
-const { name, appId, version, description } = require(path.join(__dirname, '../', 'package.json'))
+import pkg from '../package.json' with { type: 'json' }
+
+//import path from 'path'
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const { name, appId, version, description } = pkg
 const appProtocol = name
 app.setAppUserModelId(appId || '')
 
@@ -17,9 +25,10 @@ const mostrarNotificacion = (title = 'Titulo', body = 'prueba body') => {
 }
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
+/*if (import('electron-squirrel-startup')) {
+  console.log('por aca')
   app.quit()
-}
+}*/
 
 const createWindow = () => {
   // Create the browser window.
@@ -42,14 +51,14 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   createWindow()
 
-  mostrarNotificacion('Prueba', 'mensaje de prueba')
-
+  //mostrarNotificacion('Prueba', 'mensaje de prueba...')
+  suscribe()
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
+  app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
     }

@@ -1,24 +1,24 @@
-const { app } = require('electron');
-const {instalar, desInstalar} = require('./registro.js');
+import { app } from 'electron'
+import { instalar, desInstalar } from './registro.js'
 
-module.exports = ()=>{
-  const isSquirrel = process.argv.some(arg => arg.startsWith('--squirrel'));
+export default () => {
+  const isSquirrel = process.argv.some((arg) => arg.startsWith('--squirrel'))
   if (isSquirrel) {
-    const squirrelEvent = process.argv[1];
+    const squirrelEvent = process.argv[1]
     switch (squirrelEvent) {
       case '--squirrel-install':
       case '--squirrel-updated':
-        instalar();
-        app.quit();
-        break;
+        instalar()
+        app.quit()
+        break
       case '--squirrel-uninstall':
-        desInstalar();
-        app.quit();
-        break;
+        desInstalar()
+        app.quit()
+        break
       case '--squirrel-obsolete':
-        console.log('squirrel-obsolete');
-        app.quit();
-        break;
+        console.log('squirrel-obsolete')
+        app.quit()
+        break
     }
   }
 }

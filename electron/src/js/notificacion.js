@@ -1,16 +1,16 @@
-const { app, Notification} = require('electron/main');
+import { Notification } from 'electron/main'
 
-module.exports = (title='Titulo', body='prueba body') => {
+export default (title = 'Titulo', body = 'prueba body') => {
   const notification = new Notification({
     title: title,
     body: body,
     silent: false,
-    timeoutType:'never'
-  });
+    timeoutType: 'never',
+  })
 
   notification.on('show', () => console.log('Notification shown'))
   notification.on('click', () => {
-    console.log('Notification clicked'); 
+    console.log('Notification clicked')
     //openDetailsWindow();
   })
   notification.on('close', () => console.log('Notification closed'))
@@ -18,10 +18,8 @@ module.exports = (title='Titulo', body='prueba body') => {
     console.log(`Reply: ${reply}`)
   })
 
-  notification.show();
+  notification.show()
 }
-
-
 
 /*
   const toastXml = `<toast launch="${appProtocol}://?action=click" activationType="protocol">
