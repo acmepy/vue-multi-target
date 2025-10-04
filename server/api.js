@@ -1,3 +1,4 @@
+/* global process */
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
@@ -66,7 +67,7 @@ app.post('/notify', async (req, res) => {
 
   // Electron
   electronClients.forEach((c) => {
-    wss.clients.forEach((ws) => {
+    wss.clients.forEach((/** @type {any} */ ws) => {
       if (ws.clientId === c.clientId && ws.readyState === ws.OPEN) {
         ws.send(payload)
       }
@@ -82,7 +83,7 @@ server.on('upgrade', (request, socket, head) => {
   console.log('upgrade:', url.pathname, 'clientId:', clientId)
 
   if (url.pathname === '/upgrade') {
-    wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.handleUpgrade(request, socket, head, (/** @type {any} */ ws) => {
       ws.clientId = clientId
       wss.emit('connection', ws, request)
     })
@@ -91,7 +92,7 @@ server.on('upgrade', (request, socket, head) => {
   }
 })
 
-wss.on('connection', (ws) => {
+wss.on('connection', (/** @type {any} */ ws) => {
   console.log('Cliente conectado WS:', ws.clientId)
 
   /*ws.on('close', () => {
