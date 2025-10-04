@@ -1,10 +1,12 @@
-import { app, BrowserWindow, Notification } from 'electron'
+/* global process */
+
+import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
 
 import squirrelEvent from './js/squirrel-events.js'
 //const actualizar = require('./js/updater.js')
 //const Tray = require('./tray.js');
-import Notificacion from './js/notificacion.js'
+//import Notificacion from './js/notificacion.js'
 import { suscribe } from './electron-notifications.js'
 
 import pkg from '../package.json' with { type: 'json' }
@@ -16,13 +18,14 @@ const __dirname = path.dirname(__filename)
 
 const { name, appId, version, description } = pkg
 const appProtocol = name
+console.log({ name, appId, version, description, appProtocol })
 app.setAppUserModelId(appId || '')
 
 squirrelEvent()
 
-const mostrarNotificacion = (title = 'Titulo', body = 'prueba body') => {
+/*const mostrarNotificacion = (title = 'Titulo', body = 'prueba body') => {
   Notificacion(title, body)
-}
+}*/
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 /*if (import('electron-squirrel-startup')) {

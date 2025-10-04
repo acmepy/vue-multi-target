@@ -33,7 +33,6 @@
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@types/electron": "^1.4.38",
-    "@types/node": "^24.5.2",
     "@vite-pwa/assets-generator": "^1.0.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
