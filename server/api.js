@@ -41,8 +41,8 @@ app.get('/app/', (req, res) => {
 
 app.post('/subscribe', (req, res) => {
   const sub = req.body
-  if (sub.endpoint) {
-    const exists = subscriptions.find((s) => s.endpoint === sub.endpoint)
+  if (sub.subscription?.endpoint) {
+    const exists = subscriptions.find((s) => s.subscription.endpoint === sub.subscription.endpoint)
     if (!exists) {
       subscriptions.push(req.body)
     }
@@ -63,7 +63,7 @@ app.post('/notify', async (req, res) => {
   const payload = JSON.stringify({ title, body })
 
   // PWA
-  await Promise.allSettled(subscriptions.map((sub) => webpush.sendNotification(sub, payload)))
+  await Promise.allSettled(subscriptions.map((sub) => webpush.sendNotification(sub.subscription, payload)))
 
   // Electron
   electronClients.forEach((c) => {

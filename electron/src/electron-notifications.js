@@ -16,7 +16,7 @@ export async function subscribeElectron() {
   await fetch(`${SERVER_URL}/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ clientId }),
+    body: JSON.stringify({ userId: 'prueba', clientId }),
   })
   console.log('Electron suscripcion enviada al servidor')
 }
@@ -27,6 +27,7 @@ export function connectNotifications() {
     return
   }
 
+  //ws = new WebSocket(`ws://localhost:3000/upgrade?clientId=${clientId}`)
   ws = new WebSocket(`ws://localhost:3000/upgrade?clientId=${clientId}`)
 
   ws.on('open', () => {

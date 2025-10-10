@@ -9,14 +9,14 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)))
 }
 
-export async function subscribeToPush() {
+export async function subscribe() {
   const reg = await navigator.serviceWorker.ready
 
-  let sub = await reg.pushManager.getSubscription()
+  let subscription = await reg.pushManager.getSubscription()
 
-  if (!sub) {
+  if (!subscription) {
     console.log('ℹ️ No había suscripción, creando una nueva...')
-    sub = await reg.pushManager.subscribe({
+    subscription = await reg.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
     })
@@ -27,14 +27,14 @@ export async function subscribeToPush() {
   await fetch('http://localhost:3000/subscribe', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sub),
+    body: JSON.stringify({ userId: 'pwa', subscription }),
   })
 
   console.log('✅ Suscripción enviada al servidor')
 }
 
 export function register() {
-  subscribeToPush()
+  subscribe()
   registerSW({
     immediate: true, // se registra y actualiza al cargar
     onNeedRefresh() {}, // no hacemos nada, nada de notificaciones extra
