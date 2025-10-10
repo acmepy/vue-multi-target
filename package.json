@@ -1,7 +1,7 @@
 {
   "name": "vue-vite-pwa",
   "appId": "com.acmepy.vue",
-  "appName": "Vue",
+  "appName": "vue",
   "version": "0.0.1",
   "description": "Vue Template",
   "private": true,

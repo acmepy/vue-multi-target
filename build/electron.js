@@ -11,10 +11,11 @@ const electronPackage = '../electron/package.json'
 
 const updPackage = async () => {
   let pk = JSON.parse(readFileSync(electronPackage, 'utf8'))
-  pk.name = data.name
   pk.version = data.version
   pk.description = data.description
   pk.productName = data.appName
+  pk.name = data.appName //para que nupkg tenga el mismo nombre
+  pk.appId = data.appId
   writeFileSync(electronPackage, JSON.stringify(pk, null, '\t'))
 }
 

@@ -1,5 +1,6 @@
+/* global process */
 import { app } from 'electron'
-import { instalar, desInstalar } from './registro.js'
+import { instalarWin, desInstalarWin } from './registro.js'
 
 export default () => {
   const isSquirrel = process.argv.some((arg) => arg.startsWith('--squirrel'))
@@ -8,11 +9,11 @@ export default () => {
     switch (squirrelEvent) {
       case '--squirrel-install':
       case '--squirrel-updated':
-        instalar()
+        instalarWin()
         app.quit()
         break
       case '--squirrel-uninstall':
-        desInstalar()
+        desInstalarWin()
         app.quit()
         break
       case '--squirrel-obsolete':

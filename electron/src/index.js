@@ -7,7 +7,7 @@ import squirrelEvent from './js/squirrel-events.js'
 //const actualizar = require('./js/updater.js')
 //const Tray = require('./tray.js');
 //import Notificacion from './js/notificacion.js'
-import { suscribe } from './electron-notifications.js'
+import { suscribe } from './js/notificacion-push.js'
 
 import pkg from '../package.json' with { type: 'json' }
 
