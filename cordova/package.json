@@ -1,6 +1,6 @@
 {
 	"name": "vue-vite-pwa",
-	"displayName": "Vue",
+	"displayName": "vue",
 	"description": "Vue Template",
 	"version": "0.0.1",
 	"main": "index.js",
