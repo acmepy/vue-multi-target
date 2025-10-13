@@ -3,9 +3,13 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+
+import data from './routes/data.js';
+
 import webpush from 'web-push';
 import { WebSocketServer } from 'ws';
 import http from 'http';
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -38,6 +42,8 @@ app.get('/app/', (req, res) => {
 });
 
 app.use('/electron', express.static('../electron/out/make/squirrel.windows/x64'));
+
+app.use('/api', data);
 
 app.post('/subscribe', (req, res) => {
   const sub = req.body;
