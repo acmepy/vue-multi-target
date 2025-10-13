@@ -3,8 +3,10 @@
 ## Electron
 
 - [ ] Auto update
-- [ ] src/index.js pasar a module
+- [x] src/index.js pasar a module
+- [ ] web socket secure wss en produccion
 
-## Electron
+## CORDOVA
 
 - [ ] Auto update
+- [ ] web socket secure wss en produccion

@@ -1,21 +1,21 @@
-import './assets/main.css'
-import { register } from './utils/push'
+import './assets/main.css';
+import { register } from './utils/push';
 //import { registerSW } from 'virtual:pwa-register'
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-import App from './App.vue'
-import router from './router'
+import App from './App.vue';
+import router from './router';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
 
-app.mount('#app')
+app.mount('#app');
 
-register()
+register();
 /*registerSW({
   immediate: true, // se registra y actualiza al cargar
   onNeedRefresh() {}, // no hacemos nada, nada de notificaciones extra

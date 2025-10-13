@@ -1,8 +1,7 @@
-import { FusesPlugin } from '@electron-forge/plugin-fuses'
-import { FuseV1Options, FuseVersion } from '@electron/fuses'
-//import { appName, version } = require('../package.json')
-import pkg from '../package.json' with { type: 'json' }
-const { appName, version } = pkg
+import { FusesPlugin } from '@electron-forge/plugin-fuses';
+import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import pkg from '../package.json' with { type: 'json' };
+const { appName, version } = pkg;
 
 export default {
   packagerConfig: {
@@ -14,20 +13,11 @@ export default {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: { setupIcon: './src/icon/electron.ico', iconUrl: 'http://www.guarapi.com.py/notificaciones/windows/electron.ico', setupExe: `${appName}-${version}.exe` },
+      config: { setupIcon: './src/icon/electron.ico', iconUrl: 'localhost:3000/favicon.ico', setupExe: `${appName}-${version}.exe` },
     },
-    {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'], //'win32',
-    },
-    {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
+    { name: '@electron-forge/maker-zip', platforms: ['darwin'] },
+    { name: '@electron-forge/maker-deb', config: {} },
+    { name: '@electron-forge/maker-rpm', config: {} },
   ],
   plugins: [
     {
@@ -47,4 +37,4 @@ export default {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
-}
+};
