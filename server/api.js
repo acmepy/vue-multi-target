@@ -6,10 +6,10 @@ import bodyParser from 'body-parser';
 import webpush from 'web-push';
 import { WebSocketServer } from 'ws';
 import http from 'http';
-//import path from 'path'
-//import { fileURLToPath } from 'url'
-//const __filename = fileURLToPath(import.meta.url)
-//const __dirname = path.dirname(__filename)
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
@@ -24,20 +24,20 @@ const subscriptions = [];
 const electronClients = [];
 
 app.get('/', (req, res) => {
-  console.log('por aqui');
   res.json({ message: 'Notificaciones push.' });
 });
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile('../dist/favicon.ico');
+  res.sendFile(path.join(__dirname, '..', '/dist/favicon.ico'));
 });
 app.get('/pwa-192x192.png', (req, res) => {
-  res.sendFile('../dist/pwa-192x192.png');
+  res.sendFile(path.join(__dirname, '..', '/dist/pwa-192x192.png'));
 });
 app.use('/app', express.static('../dist'));
-
 app.get('/app/', (req, res) => {
   res.sendFile('../dist/index.html');
 });
+
+app.use('/electron', express.static('../electron/out/make/squirrel.windows/x64'));
 
 app.post('/subscribe', (req, res) => {
   const sub = req.body;
@@ -49,7 +49,6 @@ app.post('/subscribe', (req, res) => {
     console.log('iniciando suscripcion', subscriptions.length, subscriptions);
     res.status(201).json({});
   } else if (sub.clientId) {
-    // es Electron
     const exists = electronClients.find((c) => c.clientId === sub.clientId);
     if (!exists) electronClients.push(sub);
     console.log('Electron cliente registrado:', electronClients.length);

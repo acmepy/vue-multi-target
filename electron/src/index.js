@@ -3,7 +3,7 @@ import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 
 import squirrelEvent from './js/squirrel-events.js';
-//const actualizar = require('./js/updater.js')
+import updater from './js/updater.js';
 //const Tray = require('./tray.js');
 //import Notificacion from './js/notificacion.js'
 import { suscribe } from './js/notificacion-push.js';
@@ -58,6 +58,8 @@ app.whenReady().then(async () => {
 
   //mostrarNotificacion('Prueba', 'mensaje de prueba...')
   suscribe();
+  updater();
+
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   app.on('activate', async () => {

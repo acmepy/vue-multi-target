@@ -1,7 +1,7 @@
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import pkg from '../package.json' with { type: 'json' };
-const { appName, version } = pkg;
+const { appName /*, version*/ } = pkg;
 
 export default {
   packagerConfig: {
@@ -13,7 +13,7 @@ export default {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: { setupIcon: './src/icon/electron.ico', iconUrl: 'localhost:3000/favicon.ico', setupExe: `${appName}-${version}.exe` },
+      config: { setupIcon: './src/icon/electron.ico', iconUrl: 'localhost:3000/favicon.ico', setupExe: `${appName}.exe` },
     },
     { name: '@electron-forge/maker-zip', platforms: ['darwin'] },
     { name: '@electron-forge/maker-deb', config: {} },
