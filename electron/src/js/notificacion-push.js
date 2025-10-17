@@ -2,7 +2,7 @@ import { Notification } from 'electron/main';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'ws';
 
-const SERVER_URL = 'localhost:3000'; // tu servidor Express
+const SERVER_URL = '3ff78e9b52ee.ngrok-free.app'; // tu servidor Express
 let clientId = null;
 let ws = null;
 
@@ -14,7 +14,7 @@ export async function suscribe() {
       //localStorage.setItem('clientId', clientId)
     }
 
-    await fetch(`http://${SERVER_URL}/subscribe`, {
+    await fetch(`https://${SERVER_URL}/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'prueba', clientId, platform: 'electron' }),
@@ -32,7 +32,7 @@ export function connect() {
     return;
   }
 
-  ws = new WebSocket(`ws://${SERVER_URL}/upgrade?clientId=${clientId}`);
+  ws = new WebSocket(`wss://${SERVER_URL}/upgrade?clientId=${clientId}`);
 
   ws.on('open', () => {
     console.log('WS conectado');

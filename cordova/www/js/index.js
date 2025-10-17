@@ -20,7 +20,7 @@
 
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
-import { suscribe } from './notificacion-push';
+//import { suscribe } from './notificacion-push';
 document.addEventListener('deviceready', onDeviceReady, false);
 
 async function onDeviceReady() {
@@ -28,5 +28,5 @@ async function onDeviceReady() {
 
   console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
   //document.getElementById('deviceready').classList.add('ready');
-  await suscribe();
+  await window.suscribe(); // ahora funciona sin import
 }
