@@ -29,4 +29,13 @@ async function onDeviceReady() {
   console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
   //document.getElementById('deviceready').classList.add('ready');
   //await window.suscribe(); // ahora funciona sin import
+  cordova.plugins.foregroundService.start(
+    'Vue',
+    'Escuchando notificaciones en segundo plano…',
+    'ic_notification', // icono opcional en res/drawable
+    1 // ID de notificación
+  );
+  cordova.plugins.notification.local.requestPermission(function (granted) {
+    console.log('Permiso para notificaciones locales:', granted);
+  });
 }
