@@ -9,7 +9,7 @@ function generarUUID() {
   });
 }
 
-const SERVER_URL = '3ff78e9b52ee.ngrok-free.app';
+//const SERVER_URL = '3d1486a79b9a.ngrok-free.app';
 let clientId = null;
 let ws = null;
 
@@ -20,7 +20,7 @@ async function suscribe() {
   window.clientId = clientId;
 
   try {
-    await fetch(`https://${SERVER_URL}/subscribe`, {
+    await fetch(`https://${window.SERVER}/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'prueba', clientId, platform: 'cordova' }),
@@ -38,7 +38,7 @@ function connect() {
     return;
   }
 
-  ws = new WebSocket(`wss://${SERVER_URL}/upgrade?clientId=${clientId}`);
+  ws = new WebSocket(`wss://${window.SERVER}/upgrade?clientId=${clientId}`);
 
   ws.onopen = () => {
     console.log('WS conectado');
@@ -76,9 +76,10 @@ function notification({ title, body }) {
 }
 
 console.log('notificaciones push cargado');
-window.suscribe = suscribe;
+/*window.suscribe = suscribe;
 window.connect = connect;
-window.notification = notification;
+window.notification = notification;*/
+window.SERVER = '3d1486a79b9a.ngrok-free.app';
 suscribe();
 
 /*

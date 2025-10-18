@@ -28,5 +28,5 @@ async function onDeviceReady() {
 
   console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
   //document.getElementById('deviceready').classList.add('ready');
-  await window.suscribe(); // ahora funciona sin import
+  //await window.suscribe(); // ahora funciona sin import
 }

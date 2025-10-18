@@ -10,6 +10,8 @@ import webpush from 'web-push';
 import { WebSocketServer } from 'ws';
 import http from 'http';
 
+//import apkUpd from './js/apk-updater.js';
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -42,7 +44,16 @@ app.get('/app/', (req, res) => {
 });
 
 app.use('/electron', express.static('../electron/out/make/squirrel.windows/x64'));
+app.use('/android', express.static('../cordova/platforms/android/app/build/outputs/apk/debug'));
+/*app.get('/android/check', async (req, res) => {
+  res.json({ ok: true, data: await apkUpd.version() });
+});*/
 
+/* escucha los cambios que se hacen en la carpeta apk/debug
+setTimeout(() => {
+  apkUpd.watch();
+}, 2000);
+*/
 app.use('/api', data);
 
 app.post('/subscribe', (req, res) => {

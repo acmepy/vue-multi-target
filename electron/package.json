@@ -3,7 +3,7 @@
 	"appId": "com.acmepy.vue",
 	"productName": "vue",
 	"description": "Vue Template",
-	"version": "0.0.7",
+	"version": "0.0.9",
 	"type": "module",
 	"main": "src/index.js",
 	"scripts": {

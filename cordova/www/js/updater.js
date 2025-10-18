@@ -1,10 +1,9 @@
 /* global ApkUpdater */
+const SERVER = `https://${window.SERVER}/android/`;
+const version = SERVER + 'output-metadata.json';
+const apk = SERVER + 'app-debug.apk';
 
-const SERVER = 'http://localhost:3000/apk';
-const version = SERVER + '/app.json';
-const apk = SERVER + 'app.apk';
-
-export async function puedoInstalar() {
+async function puedoInstalar() {
   let puedoInstalar = true;
   console.log('updater.puedoInstalar1', 'iniciando');
   puedoInstalar = await ApkUpdater.canRequestPackageInstalls();
@@ -23,18 +22,21 @@ export async function puedoInstalar() {
 }
 
 async function buscar() {
-  const remote = await fetch(version).then((r) => r.json()); //, { headers: { Authorization: 'Basic ' + btoa(username + ':' + password) } });
+  console.log('updater.buscar iniciando');
+  const remote = await fetch(version, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json()); //, { headers: { Authorization: 'Basic ' + btoa(username + ':' + password) } });
+  console.log('updater.buscar 2', remote);
   const local = await ApkUpdater.getInstalledVersion();
-  const actualizacionDisponible = remote.app.version.code > local.version.code;
-  console.log('updater.buscar', { remote: remote.app.version.code, local: local.version.code, actualizacionDisponible });
+  const actualizacionDisponible = remote.elements[0].versionCode > local.version.code;
+  console.log('updater.buscar 3', { remote: remote.elements[0].versionCode, local: local.version.code, actualizacionDisponible });
   if (actualizacionDisponible) {
-    confirm('Hay una nueva versión, desea actualizar?', () => {
-      actualizar();
-    });
+    if (confirm('Hay una nueva versión, desea actualizar?')) {
+      await actualizar();
+    }
   }
 }
 
 async function actualizar() {
+  console.log('updater.actualizar iniciando');
   if (await puedoInstalar()) {
     preloader('Descargando...');
     await ApkUpdater.download(apk); //, {authorization: "Basic " + btoa(username+':'+password)})
@@ -52,4 +54,7 @@ async function preloader(data) {
   }
 }
 
-export default function () {}
+//export default function () {}
+
+console.log('updater buscando actualizaciones');
+buscar();

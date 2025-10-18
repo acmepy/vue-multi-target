@@ -3,22 +3,27 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { Icon } from '@iconify/vue';
 import { resetStors } from './stores';
+import pkg from '../package.json' with { type: 'json' };
+
 
 function resetStors1() {
   resetStors();
 }
+
+console.log('app', pkg.version)
 </script>
 
 <template>
   <header>
     <Icon icon="devicon:vuejs" class="logo" width="125" height="125" aria-label="Vue logo" />
-    <button @click="resetStors1">Reset Stors </button>
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <nav>
         <RouterLink to="/">Home.</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+      <button @click="resetStors1">Reset Stors </button>
+      <p>{{ pkg.version }}</p>
     </div>
   </header>
 
