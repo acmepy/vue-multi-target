@@ -10,8 +10,6 @@ import webpush from 'web-push';
 import { WebSocketServer } from 'ws';
 import http from 'http';
 
-//import apkUpd from './js/apk-updater.js';
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -26,8 +24,8 @@ const wss = new WebSocketServer({ noServer: true });
 
 webpush.setVapidDetails('mailto:tuemail@dominio.com', process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
 
-const subscriptions = [];
-const electronClients = [];
+const pwaSubscriptions = [];
+const wsSubscriptions = [];
 
 app.get('/', (req, res) => {
   res.json({ message: 'Notificaciones push.' });
@@ -45,30 +43,24 @@ app.get('/app/', (req, res) => {
 
 app.use('/electron', express.static('../electron/out/make/squirrel.windows/x64'));
 app.use('/android', express.static('../cordova/platforms/android/app/build/outputs/apk/debug'));
-/*app.get('/android/check', async (req, res) => {
-  res.json({ ok: true, data: await apkUpd.version() });
-});*/
 
-/* escucha los cambios que se hacen en la carpeta apk/debug
-setTimeout(() => {
-  apkUpd.watch();
-}, 2000);
-*/
 app.use('/api', data);
 
 app.post('/subscribe', (req, res) => {
   const sub = req.body;
   if (sub.subscription?.endpoint) {
-    const exists = subscriptions.find((s) => s.subscription.endpoint === sub.subscription.endpoint);
+    const exists = pwaSubscriptions.find((s) => s.subscription.endpoint === sub.subscription.endpoint);
+    console.log(pwaSubscriptions);
     if (!exists) {
-      subscriptions.push(req.body);
+      pwaSubscriptions.push(req.body);
     }
-    console.log('iniciando suscripcion', subscriptions.length, subscriptions);
+    console.log('iniciando suscripcion', pwaSubscriptions.length, pwaSubscriptions);
     res.status(201).json({});
   } else if (sub.clientId) {
-    const exists = electronClients.find((c) => c.clientId === sub.clientId);
-    if (!exists) electronClients.push(sub);
-    console.log('Electron cliente registrado:', electronClients.length);
+    const exists = wsSubscriptions.find((c) => c.clientId === sub.clientId);
+    if (!exists) wsSubscriptions.push(sub);
+    console.log('Electron cliente registrado:', wsSubscriptions.length);
+    console.log(wsSubscriptions);
     res.json({ ok: true });
   }
 });
@@ -79,18 +71,36 @@ app.post('/notify', async (req, res) => {
   const payload = JSON.stringify({ title, body });
 
   // PWA
-  await Promise.allSettled(subscriptions.map((sub) => webpush.sendNotification(sub.subscription, payload)));
-
-  // Electron
-  electronClients.forEach((c) => {
-    wss.clients.forEach((/** @type {any} */ ws) => {
+  for (const [key, sub] of pwaSubscriptions) {
+    try {
+      await webpush.sendNotification(sub.subscription, JSON.stringify(payload));
+    } catch (err) {
+      if (err.statusCode === 410 || err.statusCode === 404) {
+        console.log('Subscripción inválida, eliminando...');
+        pwaSubscriptions.splice(key, 1);
+      }
+    }
+  }
+  // Electron & Cordova
+  for (const c of wsSubscriptions) {
+    wss.clients.forEach((ws) => {
       if (ws.clientId === c.clientId && ws.readyState === ws.OPEN) {
         ws.send(payload);
       }
     });
-  });
+  }
+  // PWA
+  //await Promise.allSettled(subscriptions.map((sub) => webpush.sendNotification(sub.subscription, payload)));
+  // Electron & Cordova
+  /*electronClients.forEach((c) => {
+    wss.clients.forEach((/** @type {any} */ /* ws) => {
+      if (ws.clientId === c.clientId && ws.readyState === ws.OPEN) {
+        ws.send(payload);
+      }
+    });
+  });*/
 
-  res.json({ sent: subscriptions.length + electronClients.length });
+  res.json({ sent: pwaSubscriptions.length + wsSubscriptions.length });
 });
 server.on('upgrade', (request, socket, head) => {
   console.log('upgrade');
@@ -99,7 +109,7 @@ server.on('upgrade', (request, socket, head) => {
   console.log('upgrade:', url.pathname, 'clientId:', clientId);
 
   if (url.pathname === '/upgrade') {
-    wss.handleUpgrade(request, socket, head, (/** @type {any} */ ws) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
       ws.clientId = clientId;
       wss.emit('connection', ws, request);
     });
@@ -111,9 +121,14 @@ server.on('upgrade', (request, socket, head) => {
 wss.on('connection', (/** @type {any} */ ws) => {
   console.log('Cliente conectado WS:', ws.clientId);
 
-  /*ws.on('close', () => {
-    console.log('Cliente desconectado:', ws.clientId)
-  })*/
+  ws.on('close', () => {
+    wsSubscriptions.forEach((c, x) => {
+      if (c.clientId == ws.clientId) {
+        console.log('Cliente desconectado:', c.clientId);
+        wsSubscriptions.splice(x, 1);
+      }
+    });
+  });
 });
 
 server.listen(3000, () => console.log('Backend en http://localhost:3000'));
