@@ -21,7 +21,6 @@
 	"license": "MIT",
 	"dependencies": {
 		"electron-squirrel-startup": "^1.0.1",
-		"firebase": "^12.4.0",
 		"uuidv4": "^6.2.13",
 		"ws": "^8.18.3"
 	},
