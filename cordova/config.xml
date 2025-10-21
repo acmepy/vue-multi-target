@@ -29,13 +29,17 @@
 		<splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" /-->
 
 		<preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-xxxhdpi.png" />
-    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
+	    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
 
 		<preference name="SplashMaintainAspectRatio" value="true" />
 		<preference name="SplashShowOnlyFirstTime" value="false" />
 		<preference name="FadeSplashScreenDuration" value="300" />
 		<preference name="SplashScreenDelay" value="2000" />
 		<preference name="ShowSplashScreenSpinner" value="false" />		
+
+		<platform name="android">
+			<resource-file src="google-services.json" target="app/google-services.json" />
+		</platform>
 
 		<!--edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
   		<application android:usesCleartextTraffic="true" />
