@@ -1,4 +1,3 @@
-/* global process */
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -15,6 +14,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const distPath = path.resolve(__dirname, '../dist');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ app.use(bodyParser.json());
 const server = http.createServer(app);
 const wss = new WebSocketServer({ noServer: true });
 
-webpush.setVapidDetails('mailto:tuemail@dominio.com', process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
+webpush.setVapidDetails(`mailto:${process.env.VAPID_MAIL}`, process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
 
 const pwaSubscriptions = [];
 const wsSubscriptions = [];
@@ -36,9 +37,14 @@ app.get('/favicon.ico', (req, res) => {
 app.get('/pwa-192x192.png', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '/dist/pwa-192x192.png'));
 });
-app.use('/app', express.static('../dist'));
-app.get('/app/', (req, res) => {
-  res.sendFile('../dist/index.html');
+
+app.get('/', (req, res) => res.redirect('/app/'));
+app.use('/app', express.static(distPath));
+app.get(/^\/app(\/.*)?$/, (req, res, next) => {
+  if (req.path.match(/\.[^\/]+$/)) {
+    next();
+  }
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 app.use('/electron', express.static('../electron/out/make/squirrel.windows/x64'));
@@ -67,13 +73,14 @@ app.post('/subscribe', (req, res) => {
 
 app.post('/notify', async (req, res) => {
   console.log('enviando notificacion', req.body);
-  const { title = 'Notificación', body = '' } = req.body;
-  const payload = JSON.stringify({ title, body });
+  const { title = 'Notificación', body = '', url = '/' } = req.body;
+  const payload = JSON.stringify({ title, body, url });
 
   // PWA
-  for (const [key, sub] of pwaSubscriptions) {
+  for (const key in pwaSubscriptions) {
+    const sub = pwaSubscriptions[key];
     try {
-      await webpush.sendNotification(sub.subscription, JSON.stringify(payload));
+      await webpush.sendNotification(sub.subscription, payload);
     } catch (err) {
       if (err.statusCode === 410 || err.statusCode === 404) {
         console.log('Subscripción inválida, eliminando...');

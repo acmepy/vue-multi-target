@@ -1,5 +1,4 @@
-/* global ApkUpdater */
-const SERVER = `https://${window.SERVER}/android/`;
+const SERVER = `https://${'fdf623084ec8.ngrok-free.app'}/android/`;
 const version = SERVER + 'output-metadata.json';
 const apk = SERVER + 'app-debug.apk';
 

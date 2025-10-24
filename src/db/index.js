@@ -1,10 +1,12 @@
 import { openDB } from 'idb';
 import tablas from '@/db/tablas';
 
+const server_url = import.meta.env.VITE_SERVER_URL;
+
 let _db;
 let _api;
 
-export async function open(api = 'http://localhost:3000/api/') {
+export async function open(api = `https://${server_url}/api/`) {
   if (!_api) {
     _api = api;
   }
@@ -23,7 +25,7 @@ export async function open(api = 'http://localhost:3000/api/') {
   return _db;
 }
 export async function download(tabla) {
-  const tmp = await fetch(_api + tabla).then((r) => r.json());
+  const tmp = await fetch(_api + tabla, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json());
   add(tabla, tmp);
   return tmp;
 }

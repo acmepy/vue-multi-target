@@ -1,9 +1,9 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
+import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 //https://github.com/vite-pwa/vite-plugin-pwa/blob/main/examples/vue-router/vite.config.ts
@@ -16,8 +16,8 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       injectManifest: {
-        swSrc: 'src/sw.js', // 👉 archivo fuente
-        swDest: 'dist/sw.js', // 👉 archivo generado
+        swSrc: 'src/sw.js',
+        swDest: 'dist/sw.js',
       },
       injectRegister: false,
       registerType: 'autoUpdate',
@@ -26,6 +26,7 @@ export default defineConfig({
         name: 'vue-vite-pwa',
         short_name: 'vue-vite-pwa',
         start_url: '/app/',
+        scope: '/app/',
         display: 'standalone',
         lang: 'es',
         icons: [
@@ -35,7 +36,7 @@ export default defineConfig({
             type: 'image/png',
           },
           {
-            src: '/pwa-512x512.png',
+            src: '/app/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
@@ -46,9 +47,14 @@ export default defineConfig({
       },
     }),
   ],
-  base: './',
+  base: '/app/',
   build: {
-    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined, // todo en un solo archivo
+      },
+    },
+    cssCodeSplit: false,
     minify: 'esbuild',
     //target: 'esnext',
 
@@ -67,4 +73,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+});

@@ -38,4 +38,13 @@ async function onDeviceReady() {
   cordova.plugins.notification.local.requestPermission(function (granted) {
     console.log('Permiso para notificaciones locales:', granted);
   });
+
+  /*cordova.plugins.notification.local.on('click', (notification) => {
+    console.log('-->', notification.data.route);
+    const route = notification.data.route;
+    if (route) {
+      window.location.hash = route; // abre esa ruta
+      // o router.push(route); si tienes acceso al router
+    }
+  });*/
 }

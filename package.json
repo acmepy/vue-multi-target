@@ -19,10 +19,10 @@
     "build-cordova": "npm run build && cd ./build && node cordova.js && cd ../cordova && cordova build",
     "start-android": "cd ./build && node cordova.js && cd ../cordova && cordova run android",
     "build-electron": "cd ./build && node electron.js && cd ../electron && npm run make",
-    "build-electronx": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron && npm run make",
     "start-electron": "cd ./build && node electron.js && cd ../electron && npm run start",
     "init": "npm install && npm run generate-assets && cd ./cordova && cordova platform add android && cd ../electron && npm install && cd ../server && npm install && cd.. && npm run build-all",
-    "build-all": "npm run build && npm run build-cordova && npm run build-electron"
+    "build-all": "npm run build && npm run build-cordova && npm run build-electron",
+    "build-electronx": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron && npm run make"
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",

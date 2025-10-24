@@ -1,4 +1,6 @@
-/* global process */
+import 'dotenv/config';
+
+//import { app, BrowserWindow } from 'electron';
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 
@@ -6,7 +8,7 @@ import squirrelEvent from './js/squirrel-events.js';
 import updater from './js/updater.js';
 //const Tray = require('./tray.js');
 //import Notificacion from './js/notificacion.js'
-import { suscribe } from './js/notificacion.js';
+import { init } from './js/push.js';
 
 import pkg from '../package.json' with { type: 'json' };
 
@@ -32,14 +34,19 @@ squirrelEvent();
   app.quit()
 }*/
 
+let mainWindow;
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     icon: path.join(__dirname, 'icon/electron.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false,
     },
   });
 
@@ -57,7 +64,7 @@ app.whenReady().then(async () => {
   createWindow();
 
   //mostrarNotificacion('Prueba', 'mensaje de prueba...')
-  suscribe();
+  init(mainWindow);
   updater();
 
   // On OS X it's common to re-create a window in the app when the

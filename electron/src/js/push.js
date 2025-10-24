@@ -2,9 +2,16 @@ import { Notification } from 'electron/main';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'ws';
 
-const SERVER_URL = '3d1486a79b9a.ngrok-free.app'; // tu servidor Express
+const SERVER_URL = process.env.SERVER_URL;
 let clientId = null;
 let ws = null;
+
+let mainWindow;
+
+export async function init(mw) {
+  mainWindow = mw;
+  await suscribe();
+}
 
 export async function suscribe() {
   try {
@@ -39,9 +46,9 @@ export function connect() {
   });
   ws.on('message', (msg) => {
     try {
-      const { title, body } = JSON.parse(msg.toString());
-      console.log('WS message', { title, body });
-      notification({ title, body });
+      const { title, body, url } = JSON.parse(msg.toString());
+      console.log('WS message', { title, body, url });
+      notification({ title, body, url });
     } catch (err) {
       console.error('WS Error parseando mensaje:', err);
     }
@@ -56,8 +63,22 @@ export function connect() {
   });
 }
 
-export function notification({ title, body }) {
-  new Notification({ title, body }).show();
+export function notification({ title, body, url }) {
+  const n = new Notification({ title, body });
+  const route = url;
+  n.on('click', () => {
+    if (route && mainWindow) {
+      console.log('Notificación clickeada!');
+      mainWindow.webContents.send('notification-click', route);
+    }
+  });
+
+  /*n.on('click', () => {
+    console.log('Notificación clickeada!')
+    if (url) {shell.openExternal(url)}
+  })*/
+
+  n.show();
 }
 
 /*export function disconnectNotifications() {

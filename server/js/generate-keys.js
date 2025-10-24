@@ -1,4 +1,3 @@
-/* global process */
 import fs from 'fs';
 import path from 'path';
 import webpush from 'web-push';
@@ -24,4 +23,4 @@ envContent = upsertEnvVar(envContent, 'VAPID_PRIVATE_KEY', keys.privateKey);
 
 fs.writeFileSync(envPath, envContent);
 
-console.log('✅ Llaves VAPID generadas y guardadas en .env');
+console.log('Llaves VAPID generadas y guardadas en .env');

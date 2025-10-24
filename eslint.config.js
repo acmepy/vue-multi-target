@@ -1,20 +1,26 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import prettier from 'eslint-config-prettier';
+import { cordovaGlobals, electronGlobals } from './eslint.globals';
 
 export default [
   js.configs.recommended,
-  prettier, // 👈 desactiva reglas de ESLint que chocan con Prettier
+  prettier,
   {
-    languageOptions: {
-      globals: globals.browser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
-    rules: {
-      'no-undef': 'error', // marcar variables no declaradas
-      'no-unused-vars': 'warn', // advertir variables no usadas
-    },
+    languageOptions: { globals: globals.browser, ecmaVersion: 'latest', sourceType: 'module' },
+    rules: { 'no-undef': 'error', 'no-unused-vars': 'warn' },
+  },
+  {
+    files: ['src/sw.js'],
+    languageOptions: { globals: { ...globals.browser, ...globals.serviceworker } },
+  },
+  {
+    files: ['cordova/www/**/*.js'],
+    languageOptions: { globals: { ...globals.browser, ...cordovaGlobals } },
+  },
+  {
+    files: ['electron/src/**/*.js'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node, ...electronGlobals } },
   },
 ];
 

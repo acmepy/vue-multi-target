@@ -1,6 +1,3 @@
-/* global cordova */
-
-// 👉 Generar UUID sin librerías externas (equivalente simple a uuidv4)
 function generarUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0;
@@ -9,7 +6,7 @@ function generarUUID() {
   });
 }
 
-//const SERVER_URL = '3d1486a79b9a.ngrok-free.app';
+const SERVER_URL = 'fdf623084ec8.ngrok-free.app';
 let clientId = null;
 let ws = null;
 
@@ -20,7 +17,7 @@ async function suscribe() {
   window.clientId = clientId;
 
   try {
-    await fetch(`https://${window.SERVER}/subscribe`, {
+    await fetch(`https://${SERVER_URL}/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'prueba', clientId, platform: 'cordova' }),
@@ -38,7 +35,7 @@ function connect() {
     return;
   }
 
-  ws = new WebSocket(`wss://${window.SERVER}/upgrade?clientId=${clientId}`);
+  ws = new WebSocket(`wss://${SERVER_URL}/upgrade?clientId=${clientId}`);
 
   ws.onopen = () => {
     console.log('WS conectado');
@@ -46,9 +43,9 @@ function connect() {
 
   ws.onmessage = (msg) => {
     try {
-      const { title, body } = JSON.parse(msg.data);
-      console.log('WS mensaje', { title, body });
-      notification({ title, body });
+      const { title, body, url } = JSON.parse(msg.data);
+      console.log('WS mensaje', { title, body, url });
+      notification({ title, body, url });
     } catch (err) {
       console.error('WS Error parseando mensaje:', err);
     }
@@ -60,18 +57,20 @@ function connect() {
   };
 }
 
-function notification({ title, body }) {
+function notification({ title, body, url }) {
   if (!cordova || !cordova.plugins || !cordova.plugins.notification) {
     console.warn('Notificación local no disponible en este entorno');
     return;
   }
 
   cordova.plugins.notification.local.schedule({
+    id: 1,
     title,
     text: body,
-    foreground: true,
-    smallIcon: 'res://icon', // opcional
-    sound: true,
+    data: { route: url },
+    //foreground: true,
+    //smallIcon: 'res://icon', // opcional
+    //sound: true,
   });
 }
 
@@ -79,7 +78,7 @@ console.log('notificaciones push cargado');
 /*window.suscribe = suscribe;
 window.connect = connect;
 window.notification = notification;*/
-window.SERVER = '3d1486a79b9a.ngrok-free.app';
+//window.SERVER = '3d1486a79b9a.ngrok-free.app';
 suscribe();
 
 /*
