@@ -10,13 +10,14 @@ import ngrok from 'ngrok';
 
   upsertEnvVar('../env', 'VITE_SERVER_URL', url.replace('https://', ''));
   upsertEnvVar('../electron/env', 'SERVER_URL', url.replace('https://', ''));
+  upsertEnvVar('../cordova/www/env.js', 'SERVER_URL', url.replace('https://', ''));
 })();
 
-function upsertEnvVar(file, key, value) {
+function upsertEnvVar(file, key, value, delimitador = '=') {
   const content = fs.readFileSync(file, 'utf-8');
-  const regex = new RegExp(`^${key}=.*$`, 'm');
+  const regex = new RegExp(`^${key}${delimitador}.*$`, 'm');
   if (regex.test(content)) {
-    content = content.replace(regex, `${key}=${value}`);
+    content = content.replace(regex, `${key}${delimitador}${value}`);
   }
   content = content + `\n${key}=${value}`;
   fs.writeFileSync(file, content);

@@ -1,4 +1,5 @@
-const SERVER = `https://${'fdf623084ec8.ngrok-free.app'}/android/`;
+//const SERVER = `https://${'fdf623084ec8.ngrok-free.app'}/android/`;
+const SERVER = `https://${window.ENV.SERVER_URL}/android/`;
 const version = SERVER + 'output-metadata.json';
 const apk = SERVER + 'app-debug.apk';
 

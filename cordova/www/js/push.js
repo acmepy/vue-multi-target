@@ -6,7 +6,8 @@ function generarUUID() {
   });
 }
 
-const SERVER_URL = 'fdf623084ec8.ngrok-free.app';
+//const SERVER_URL = 'fdf623084ec8.ngrok-free.app';
+const SERVER_URL = window.ENV.SERVER_URL;
 let clientId = null;
 let ws = null;
 
@@ -75,77 +76,4 @@ function notification({ title, body, url }) {
 }
 
 console.log('notificaciones push cargado');
-/*window.suscribe = suscribe;
-window.connect = connect;
-window.notification = notification;*/
-//window.SERVER = '3d1486a79b9a.ngrok-free.app';
 suscribe();
-
-/*
-import { v4 as uuidv4 } from 'uuid';
-
-const SERVER_URL = 'localhost:3000'; // tu servidor Express
-let clientId = null;
-let ws = null;
-
-export async function suscribe() {
-  //clientId = localStorage.getItem('clientId')
-  if (!clientId) {
-    clientId = uuidv4();
-    //localStorage.setItem('clientId', clientId)
-  }
-  window.clientId = clientId;
-
-  try {
-    await fetch(`http://${SERVER_URL}/subscribe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: 'prueba', clientId, platform: 'cordova' }),
-    });
-    console.log('Suscripcion enviada');
-    connect();
-  } catch (e) {
-    console.error('Suscribe, Error registrando', e);
-  }
-}
-
-export function connect() {
-  if (!clientId) {
-    console.error('Debe suscribirse primero con subscribe()');
-    return;
-  }
-
-  ws = new WebSocket(`ws://${SERVER_URL}/upgrade?clientId=${clientId}`);
-
-  ws.onopen = () => {
-    console.log('WS conectado');
-  };
-  ws.onmessage = (msg) => {
-    try {
-      const { title, body } = JSON.parse(msg.data);
-      console.log('WS message', { title, body });
-      notification({ title, body });
-    } catch (err) {
-      console.error('WS Error parseando mensaje:', err);
-    }
-  };
-  ws.onclose = () => {
-    console.warn('WS cerrado, reintentando...');
-    setTimeout(() => connect(), 3000);
-  };
-
-  //ws.onerror = () => {};
-}
-
-export function notification({ title, body }) {
-  cordova.plugins.notification.local.schedule({
-    title,
-    text: body,
-    foreground: true,
-    smallIcon: 'res://icon', // opcional
-    sound: true,
-  });
-}
-console.log('notificaciones push');
-window.suscribe = suscribe;
-*/
