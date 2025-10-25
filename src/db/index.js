@@ -2,6 +2,7 @@ import { openDB } from 'idb';
 import tablas from '@/db/tablas';
 
 const server_url = import.meta.env.VITE_SERVER_URL;
+const db_name = import.meta.env.VITE_DB_NAME;
 
 let _db;
 let _api;
@@ -11,7 +12,7 @@ export async function open(api = `https://${server_url}/api/`) {
     _api = api;
   }
   if (!_db) {
-    _db = await openDB('vue', 1, {
+    _db = await openDB(db_name, 1, {
       upgrade(db) {
         for (const t of tablas) {
           if (!db.objectStoreNames.contains(t.name)) {
