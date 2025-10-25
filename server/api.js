@@ -28,9 +28,9 @@ webpush.setVapidDetails(`mailto:${process.env.VAPID_MAIL}`, process.env.VAPID_PU
 const pwaSubscriptions = [];
 const wsSubscriptions = [];
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.json({ message: 'Notificaciones push.' });
-});
+});*/
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '/dist/favicon.ico'));
 });

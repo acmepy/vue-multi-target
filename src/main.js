@@ -17,27 +17,20 @@ app.mount('#app');
 
 register();
 
-/*registerSW({
-  immediate: true, // se registra y actualiza al cargar
-  onNeedRefresh() {}, // no hacemos nada, nada de notificaciones extra
-  onOfflineReady() {}, // opcional
-})*/
 if (window.electronAPI) {
   window.electronAPI.onNotificationClick((route) => {
     console.log('Notificación con ruta:', route);
-    router.push(route.replace('/app/', '/')); // usa tu router de Vue
+    router.push(route.replace('/app/', '/'));
   });
 }
 
 setTimeout(() => {
-  console.log('cordova.plugins');
-  cordova.plugins.notification.local.on('click', (notification) => {
-    //console.log('-->', notification.data.route);
-    const route = notification.data.route.replace('/app/', '/');
-    console.log('-->', route);
-    if (route) {
-      //window.location.hash = route; // abre esa ruta
-      router.push(route);
-    }
-  });
+  if (cordova.plugins) {
+    cordova.plugins.notification.local.on('click', (notification) => {
+      const route = notification.data.route.replace('/app/', '/');
+      if (route) {
+        router.push(route);
+      }
+    });
+  }
 }, 3000);
