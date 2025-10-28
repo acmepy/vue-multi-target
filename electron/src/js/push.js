@@ -1,5 +1,6 @@
 import { Notification } from 'electron/main';
-import { EventSource } from 'eventsource';
+//import { EventSource } from 'eventsource';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 function generarUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -11,22 +12,22 @@ function generarUUID() {
 
 const SERVER_URL = process.env.SERVER_URL;
 let clientId = null;
-
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
 let mainWindow;
 
 export async function init(mw) {
   console.log('iniciando subscripcion');
   mainWindow = mw;
-  //clientId = localStorage.getItem('clientId')
   if (!clientId) {
     clientId = generarUUID();
-    //localStorage.setItem('clientId', clientId)
   }
   await sse();
 }
 export async function sse() {
-  console.log('conectando a ', { SERVER_URL, clientId });
-  const es = new EventSource(`${SERVER_URL}/push/sse/${'electron'}/${clientId}`);
+  const url = `${SERVER_URL}/push/sse/${'electron'}/${clientId}`;
+  console.log('conectando a ', { url, clientId });
+  //const es = new EventSource(`${SERVER_URL}/push/sse/${'electron'}/${clientId}`);
+  const es = new EventSourcePolyfill(url, options);
   es.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log('Notificación:', data);
