@@ -12,7 +12,7 @@ function generarUUID() {
 
 const SERVER_URL = process.env.SERVER_URL;
 let clientId = null;
-const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' }, heartbeatTimeout: 120000 };
 let mainWindow;
 
 export async function init(mw) {

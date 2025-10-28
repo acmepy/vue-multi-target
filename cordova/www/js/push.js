@@ -8,8 +8,7 @@ function generarUUID() {
 
 const SERVER_URL = window.ENV.SERVER_URL;
 let clientId = null;
-let ws = null;
-const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' }, heartbeatTimeout: 120000 };
 
 async function init() {
   console.log('iniciando subscripcion');
