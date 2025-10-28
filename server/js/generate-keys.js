@@ -3,24 +3,18 @@ import path from 'path';
 import webpush from 'web-push';
 
 const keys = webpush.generateVAPIDKeys();
-const envPath = path.resolve(process.cwd(), '.env');
 
-let envContent = '';
-if (fs.existsSync(envPath)) {
-  envContent = fs.readFileSync(envPath, 'utf-8');
-}
+upsertEnvVar('./server/.env', 'VAPID_PUBLIC_KEY', keys.publicKey);
+upsertEnvVar('./server/.env', 'VAPID_PRIVATE_KEY', keys.privateKey);
+upsertEnvVar('./.env', 'VITE_VAPID_PUBLIC_KEY', keys.publicKey);
 
-function upsertEnvVar(content, key, value) {
-  const regex = new RegExp(`^${key}=.*$`, 'm');
+function upsertEnvVar(file, key, value, delimitador = '=') {
+  let content = fs.readFileSync(file, 'utf-8');
+  const regex = new RegExp(`^${key}${delimitador}.*$`, 'm');
   if (regex.test(content)) {
-    return content.replace(regex, `${key}=${value}`);
+    content = content.replace(regex, `${key}${delimitador}${value}`);
+  } else {
+    content = content + `\n${key}=${value}`;
   }
-  return content + `\n${key}=${value}`;
+  fs.writeFileSync(file, content);
 }
-
-envContent = upsertEnvVar(envContent, 'VAPID_PUBLIC_KEY', keys.publicKey);
-envContent = upsertEnvVar(envContent, 'VAPID_PRIVATE_KEY', keys.privateKey);
-
-fs.writeFileSync(envPath, envContent);
-
-console.log('Llaves VAPID generadas y guardadas en .env');

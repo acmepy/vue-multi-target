@@ -8,13 +8,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 //const os = process.platform == 'win32' ? 'windows' : 'linux';
-const URL = `http://localhost:3000/electron`;
+//const URL = `http://localhost:3000/electron`;
+const SERVER_URL = `${process.env.SERVER_URL}/electron`;
 
 export default () => {
   if (app.isPackaged) {
     try {
       //autoUpdater.setFeedURL(`http://www.guarapi.com.py/notificaciones/update/${process.platform}/${app.getVersion()}`);
-      autoUpdater.setFeedURL(URL);
+      autoUpdater.setFeedURL(SERVER_URL);
       autoUpdater.checkForUpdates();
       autoUpdater.on('checking-for-update', () => {
         console.log('Buscando Actualizaciones');

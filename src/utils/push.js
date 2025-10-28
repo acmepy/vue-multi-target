@@ -25,7 +25,7 @@ export async function subscribe() {
     console.log('Ya existe una suscripción, se reutiliza.');
   }
 
-  await fetch(`https://${server_url}/subscribe`, {
+  await fetch(`${server_url}/push/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId: 'pwa', subscription }),

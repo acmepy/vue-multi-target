@@ -24,8 +24,16 @@ if (window.electronAPI) {
   });
 }
 
+function isCordova() {
+  try {
+    return !!cordova;
+  } catch (e) {
+    return false;
+  }
+}
+
 setTimeout(() => {
-  if (cordova.plugins) {
+  if (isCordova()) {
     cordova.plugins.notification.local.on('click', (notification) => {
       const route = notification.data.route.replace('/app/', '/');
       if (route) {

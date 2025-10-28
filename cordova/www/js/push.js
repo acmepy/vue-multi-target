@@ -6,74 +6,40 @@ function generarUUID() {
   });
 }
 
-//const SERVER_URL = 'fdf623084ec8.ngrok-free.app';
 const SERVER_URL = window.ENV.SERVER_URL;
 let clientId = null;
 let ws = null;
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
 
-async function suscribe() {
+async function init() {
+  console.log('iniciando subscripcion');
   if (!clientId) {
     clientId = generarUUID();
   }
   window.clientId = clientId;
-
-  try {
-    await fetch(`https://${SERVER_URL}/subscribe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: 'prueba', clientId, platform: 'cordova' }),
-    });
-    console.log('Suscripción enviada correctamente');
-    connect();
-  } catch (e) {
-    console.error('Error al suscribirse', e);
-  }
+  await sse();
 }
 
-function connect() {
-  if (!clientId) {
-    console.error('Debe suscribirse primero con suscribe()');
-    return;
-  }
-
-  ws = new WebSocket(`wss://${SERVER_URL}/upgrade?clientId=${clientId}`);
-
-  ws.onopen = () => {
-    console.log('WS conectado');
-  };
-
-  ws.onmessage = (msg) => {
-    try {
-      const { title, body, url } = JSON.parse(msg.data);
-      console.log('WS mensaje', { title, body, url });
-      notification({ title, body, url });
-    } catch (err) {
-      console.error('WS Error parseando mensaje:', err);
+async function sse() {
+  const url = `${SERVER_URL}/push/sse/${'cordova'}/${clientId}`;
+  console.log('conectando a ', { url, clientId });
+  const es = new EventSourcePolyfill(url, options);
+  es.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('Notificación:', data);
+    if (!!data.title) {
+      notification(data);
     }
   };
-
-  ws.onclose = () => {
-    console.warn('WS cerrado, reintentando...');
-    setTimeout(connect, 3000);
-  };
 }
-
 function notification({ title, body, url }) {
   if (!cordova || !cordova.plugins || !cordova.plugins.notification) {
     console.warn('Notificación local no disponible en este entorno');
-    return;
+  } else {
+    cordova.plugins.notification.local.schedule({ id: 1, title, text: body, data: { route: url } }); //foreground: true, smallIcon: 'res://icon', sound: true,
   }
-
-  cordova.plugins.notification.local.schedule({
-    id: 1,
-    title,
-    text: body,
-    data: { route: url },
-    //foreground: true,
-    //smallIcon: 'res://icon', // opcional
-    //sound: true,
-  });
 }
 
-console.log('notificaciones push cargado');
-suscribe();
+document.addEventListener('deviceready', () => {
+  init();
+});

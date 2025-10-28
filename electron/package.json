@@ -22,8 +22,7 @@
 	"dependencies": {
 		"dotenv": "^17.2.3",
 		"electron-squirrel-startup": "^1.0.1",
-		"uuidv4": "^6.2.13",
-		"ws": "^8.18.3"
+		"eventsource": "^4.0.0"
 	},
 	"devDependencies": {
 		"@electron-forge/cli": "^7.9.0",

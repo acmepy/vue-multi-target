@@ -51,11 +51,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: undefined, // todo en un solo archivo
+        manualChunks: undefined, //todo en un solo archivo
       },
     },
     cssCodeSplit: false,
-    minify: 'esbuild',
+    //minify: 'esbuild',
+    minify: false,
     //target: 'esnext',
 
     target: 'es2017', //para hacer compatible con dispositivos viejos
@@ -66,7 +67,7 @@ export default defineConfig({
   },
 
   esbuild: {
-    keepNames: true, // 🔥 mantiene nombres de funciones y clases
+    keepNames: true, //mantiene nombres de funciones y clases
   },
   resolve: {
     alias: {

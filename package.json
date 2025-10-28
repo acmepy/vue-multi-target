@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
+    "generate-keys": "node ./server/js/generate-keys.js",
     "generate-assets": "pwa-assets-generator --preset minimal-2023 ./public/icon.svg && cd ./build && node generate-assets.js",
     "build-cordova": "npm run build && cd ./build && node cordova.js && cd ../cordova && cordova build",
     "start-android": "cd ./build && node cordova.js && cd ../cordova && cordova run android",

@@ -33,5 +33,10 @@
 			"cordova-plugin-apkupdater": {},
 			"cordova-plugin-foreground-service": {}
 		}
+	},
+	"dependencies": {
+		"event-source-polyfill": "^1.0.31",
+		"install": "^0.13.0",
+		"npm": "^11.6.2"
 	}
 }

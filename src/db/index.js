@@ -7,7 +7,7 @@ const db_name = import.meta.env.VITE_DB_NAME;
 let _db;
 let _api;
 
-export async function open(api = `https://${server_url}/api/`) {
+export async function open(api = `${server_url}/api/`) {
   if (!_api) {
     _api = api;
   }
