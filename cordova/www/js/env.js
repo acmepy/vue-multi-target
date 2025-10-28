@@ -3,3 +3,6 @@ window.ENV = {
 };
 
 console.log(window.ENV);
+
+SERVER_URL='bf54f3cfd402.ngrok-free.app',
+SERVER_URL='ccc556554919.ngrok-free.app',

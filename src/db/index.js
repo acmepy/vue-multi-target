@@ -1,15 +1,45 @@
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import { openDB } from 'idb';
 import tablas from '@/db/tablas';
 
 const server_url = import.meta.env.VITE_SERVER_URL;
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
 const db_name = import.meta.env.VITE_DB_NAME;
 
 let _db;
 let _api;
+let _events;
 
-export async function open(api = `${server_url}/api/`) {
+export async function open(api = `${server_url}/api`) {
   if (!_api) {
     _api = api;
+  }
+  if (!_events) {
+    for (const t of tablas) {
+      const url = `${_api}/${t.name}/event`;
+      console.log('escuchando eventos de', t.name);
+      const es = new EventSourcePolyfill(url, options);
+      es.onmessage = (e) => {
+        const tmp = JSON.parse(e.data);
+        console.log('evento:', tmp);
+        if (!!tmp.event) {
+          const { event, catalogo, data } = tmp;
+          switch (event) {
+            case 'create':
+              add(catalogo, data);
+              break;
+            case 'update':
+              update(catalogo, id, data);
+              break;
+            case 'remove':
+              remove(catalogo, id);
+              break;
+            default:
+              console.log('evento no soportado', tmp);
+          }
+        }
+      };
+    }
   }
   if (!_db) {
     _db = await openDB(db_name, 1, {
@@ -26,7 +56,7 @@ export async function open(api = `${server_url}/api/`) {
   return _db;
 }
 export async function download(tabla) {
-  const tmp = await fetch(_api + tabla, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json());
+  const tmp = await fetch(`${_api}/${tabla}`, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json());
   add(tabla, tmp);
   return tmp;
 }
