@@ -52,9 +52,21 @@ router.get('/sse/:platfom/:clientId', (req, res) => {
   res.flushHeaders();
 
   const { clientId, platform } = req.params;
-  sseSubscriptions.set(clientId, { clientId, platform, res });
-  res.write(`data: ${JSON.stringify({ ok: true, msg: 'Conectado a SSE' })}\n\n`);
-  console.log(`Cliente ${clientId} conectado. Total Conectados:${sseSubscriptions.size}`);
+  res.locals.id = clientId;
+  res.locals.platform = platform;
+  res.locals.interval = setInterval(() => {
+    res.write(`data: ${JSON.stringify({ ok: true })}\n\n`);
+  }, 120000);
+  sseSubscriptions.set(clientId, res);
+  res.on('close', () => {
+    console.log('eliminando conexion ' + res.locals.id);
+    clearInterval(res.locals.interval);
+    sseSubscriptions.delete(res.locals.id);
+    res.end();
+  });
+
+  res.write(`data: ${JSON.stringify({ ok: true, msg: 'escuchando ' + id })}\n\n`);
+  console.log('escuchando ' + id, `(${sseSubscriptions.size})`);
 });
 
 export default router;

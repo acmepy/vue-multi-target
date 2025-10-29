@@ -4,7 +4,7 @@ import bus from '@/utils/bus';
 import { openDB } from 'idb';
 import tablas from '@/db/tablas';
 
-const server_url = import.meta.env.VITE_SERVER_URL;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const options = { headers: { 'ngrok-skip-browser-warning': 'true' }, heartbeatTimeout: 120000 };
 const db_name = import.meta.env.VITE_DB_NAME;
 
@@ -14,7 +14,7 @@ let _events = new Map();
 let _clientId;
 //let _callbacks = new Map();
 
-export async function open(api = `${server_url}/api`) {
+export async function open(api = `${SERVER_URL}/api`) {
   if (!_api) {
     _api = api;
   }

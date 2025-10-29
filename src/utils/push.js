@@ -1,7 +1,7 @@
 import { registerSW } from 'virtual:pwa-register';
 
 const publicVapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-const server_url = import.meta.env.VITE_SERVER_URL;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -25,7 +25,7 @@ export async function subscribe() {
     console.log('Ya existe una suscripción, se reutiliza.');
   }
 
-  await fetch(`${server_url}/push/subscribe`, {
+  await fetch(`${SERVER_URL}/push/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId: 'pwa', subscription }),

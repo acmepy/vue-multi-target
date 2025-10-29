@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 import { loading } from '../js/dialog.js';
 
-const server_url = import.meta.env.VITE_SERVER_URL;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export default class BaseService {
-  constructor({ resource, baseUrl = `http://${server_url}/api`, schema = false }) {
+  constructor({ resource, baseUrl = `${SERVER_URL}/api`, schema = false }) {
     this.resource = resource;
     this.baseUrl = baseUrl;
     this.schema = schema;

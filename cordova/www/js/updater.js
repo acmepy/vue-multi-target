@@ -1,7 +1,6 @@
-//const SERVER = `https://${'fdf623084ec8.ngrok-free.app'}/android/`;
-const SERVER = `${window.ENV.SERVER_URL}/android/`;
-const version = SERVER + 'output-metadata.json';
-const apk = SERVER + 'app-debug.apk';
+const SERVER_URL = `${window.ENV.SERVER_URL}/android/`;
+const version = SERVER_URL + 'output-metadata.json';
+const apk = SERVER_URL + 'app-debug.apk';
 
 async function puedoInstalar() {
   let puedoInstalar = true;

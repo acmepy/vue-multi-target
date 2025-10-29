@@ -1,18 +1,15 @@
 import 'dotenv/config';
 
-//import { app, BrowserWindow } from 'electron';
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 
 import squirrelEvent from './js/squirrel-events.js';
 import updater from './js/updater.js';
 //const Tray = require('./tray.js');
-//import Notificacion from './js/notificacion.js'
 import { init } from './js/push.js';
 
 import pkg from '../package.json' with { type: 'json' };
 
-//import path from 'path'
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
