@@ -17,18 +17,19 @@
     "format": "prettier --write src/",
     "generate-keys": "node ./server/js/generate-keys.js",
     "generate-assets": "pwa-assets-generator --preset minimal-2023 ./public/icon.svg && cd ./build && node generate-assets.js",
-    "build-cordova": "npm run build && cd ./build && node cordova.js && cd ../cordova && cordova build",
+    "build-all": "npm run build && npm run build-cordova && npm run build-electron",
+    "build-cordova": "cd ./build && node cordova.js && cd ../cordova && cordova build",
     "start-android": "cd ./build && node cordova.js && cd ../cordova && cordova run android",
     "build-electron": "cd ./build && node electron.js && cd ../electron && npm run make",
     "start-electron": "cd ./build && node electron.js && cd ../electron && npm run start",
     "init": "npm install && npm run generate-assets && cd ./cordova && cordova platform add android && cd ../electron && npm install && cd ../server && npm install && cd.. && npm run build-all",
-    "build-all": "npm run build && npm run build-cordova && npm run build-electron",
     "build-electronx": "shx rm -rf ./electron/out && cd ./build && node electron.js && cd ../electron && npm run make"
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",
     "event-source-polyfill": "^1.0.31",
     "idb": "^8.0.3",
+    "mitt": "^3.0.1",
     "pinia": "^3.0.3",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"

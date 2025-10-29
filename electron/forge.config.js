@@ -1,7 +1,7 @@
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import pkg from '../package.json' with { type: 'json' };
-const { appName /*, version*/ } = pkg;
+const { appName } = pkg;
 
 export default {
   packagerConfig: {

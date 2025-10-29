@@ -3,9 +3,9 @@ import express from 'express';
 const router = express.Router();
 const sseSubscriptions = new Map();
 const data = [
-  { catalogo: 'about', data: [{ id: 0, text: 'This is an about page' }] },
+  { tabla: 'about', data: [{ id: 0, text: 'This is an about page' }] },
   {
-    catalogo: 'welcome',
+    tabla: 'welcome',
     data: [
       {
         id: 0,
@@ -36,46 +36,47 @@ const data = [
   },
 ];
 
-router.get('/:catalogo', (req, res) => {
-  const { catalogo } = req.params;
-  const d = data.find((d) => d.catalogo == catalogo);
+router.get('/:tabla', (req, res) => {
+  const { tabla } = req.params;
+  const d = data.find((d) => d.tabla == tabla);
   setTimeout(() => {
     res.json([d.data[0]]);
   }, 2000);
+
+  if (d.data.length > 1) {
+    for (let dx = 1; dx < d.data.length; dx++) {
+      const tmp = d.data[dx];
+      setTimeout(() => {
+        for (const [id, res] of sseSubscriptions) {
+          res.write(`data: ${JSON.stringify({ ok: true, event: 'create', tabla, data: [tmp] })}\n\n`);
+        }
+      }, 1500 * dx);
+    }
+  }
 });
 
-router.get('/:catalogo/event', (req, res) => {
+router.get('/:tabla/:clientId', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const { clientId, platform } = req.params;
-  sseSubscriptions.set(clientId, { clientId, platform, res });
-  res.write(`data: ${JSON.stringify({ ok: true, msg: 'escuchando eventos' })}\n\n`);
-  console.log(`Cantidad escuchando el evento :${sseSubscriptions.size}`);
+  const { tabla, clientId } = req.params;
+  const id = tabla + ':' + clientId;
+  res.locals.id = id;
+  res.locals.interval = setInterval(() => {
+    res.write(`data: ${JSON.stringify({ ok: true })}\n\n`);
+  }, 120000);
+  sseSubscriptions.set(id, res);
+  res.on('close', () => {
+    console.log('eliminando conexion ' + res.locals.id);
+    clearInterval(res.locals.interval);
+    sseSubscriptions.delete(res.locals.id);
+    res.end();
+  });
+
+  res.write(`data: ${JSON.stringify({ ok: true, msg: 'escuchando ' + id })}\n\n`);
+  console.log('escuchando ' + id, `(${sseSubscriptions.size})`);
 });
 
-/*for (const [clientId, sse] of sseSubscriptions) {
-    sse.res.write(`data: ${JSON.stringify({ ok: true, msg: 'Conectado a SSE' })}\n\n`);
-  }*/
-
 export default router;
-setTimeout(() => {
-  const catalogo = data[1].catalogo;
-  for (let d = 1; d < data[1].data.length; d++) {
-    const tmp = data[1].data[d];
-    //console.log(catalogo, tmp);
-    setTimeout(() => {
-      for (const [clientId, sse] of sseSubscriptions) {
-        sse.res.write(`data: ${JSON.stringify({ ok: true, event: 'create', catalogo, data: [tmp] })}\n\n`);
-      }
-    }, 1500 * d);
-  }
-}, 5000);
-
-setInterval(() => {
-  for (const [clientId, sse] of sseSubscriptions) {
-    sse.res.write(`data: ${JSON.stringify({ ok: true, msg: 'escuchando eventos' })}\n\n`);
-  }
-}, 120000);

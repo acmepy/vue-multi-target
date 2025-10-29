@@ -1,5 +1,4 @@
 import { Notification } from 'electron/main';
-//import { EventSource } from 'eventsource';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
 function generarUUID() {
@@ -26,7 +25,6 @@ export async function init(mw) {
 export async function sse() {
   const url = `${SERVER_URL}/push/sse/${'electron'}/${clientId}`;
   console.log('conectando a ', { url, clientId });
-  //const es = new EventSource(`${SERVER_URL}/push/sse/${'electron'}/${clientId}`);
   const es = new EventSourcePolyfill(url, options);
   es.onmessage = (event) => {
     const data = JSON.parse(event.data);
@@ -49,3 +47,16 @@ export function notification({ title, body, url }) {
 
   n.show();
 }
+
+/*
+  const toastXml = `<toast launch="${appProtocol}://?action=click" activationType="protocol">
+  <visual>
+    <binding template="ToastGeneric"><text>${title}</text><text>${body}</text></binding>
+  </visual>
+  <actions>
+    <action content="Yes" arguments="${appProtocol}://?action=yes" activationType="protocol" />
+    <action content="No" arguments="${appProtocol}://?action=no" activationType="protocol" />
+  </actions>
+</toast>`
+  const notification = new Notification({toastXml,timeoutType:'never'});
+*/

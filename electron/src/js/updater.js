@@ -1,20 +1,16 @@
 //
 //http://localhost:3000/electron/RELEASES?id=vue&localVersion=0.0.2&arch=amd64
 //
-/* global process */
 import { autoUpdater } from 'electron/main';
 import { app } from 'electron/main';
 import fs from 'node:fs';
 import path from 'node:path';
 
-//const os = process.platform == 'win32' ? 'windows' : 'linux';
-//const URL = `http://localhost:3000/electron`;
 const SERVER_URL = `${process.env.SERVER_URL}/electron`;
 
 export default () => {
   if (app.isPackaged) {
     try {
-      //autoUpdater.setFeedURL(`http://www.guarapi.com.py/notificaciones/update/${process.platform}/${app.getVersion()}`);
       autoUpdater.setFeedURL(SERVER_URL);
       autoUpdater.checkForUpdates();
       autoUpdater.on('checking-for-update', () => {

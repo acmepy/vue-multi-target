@@ -24,16 +24,6 @@ app.setAppUserModelId(appId || '');
 
 squirrelEvent();
 
-/*const mostrarNotificacion = (title = 'Titulo', body = 'prueba body') => {
-  Notificacion(title, body)
-}*/
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-/*if (import('electron-squirrel-startup')) {
-  console.log('por aca')
-  app.quit()
-}*/
-
 let mainWindow;
 
 const createWindow = () => {

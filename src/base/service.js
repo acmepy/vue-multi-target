@@ -33,10 +33,6 @@ export default class BaseService {
       const isJson = contentType && contentType.includes('application/json');
       const result = isJson ? await response.json() : await response.text();
 
-      /*if (!response.ok) {
-        throw { status: response.status, error: result };
-      }*/
-
       loading(false);
 
       return result;

@@ -1,44 +1,55 @@
+//https://github.com/febkosq8/local-save/
 import { EventSourcePolyfill } from 'event-source-polyfill';
+import bus from '@/utils/bus';
 import { openDB } from 'idb';
 import tablas from '@/db/tablas';
 
 const server_url = import.meta.env.VITE_SERVER_URL;
-const options = { headers: { 'ngrok-skip-browser-warning': 'true' } };
+const options = { headers: { 'ngrok-skip-browser-warning': 'true' }, heartbeatTimeout: 120000 };
 const db_name = import.meta.env.VITE_DB_NAME;
 
 let _db;
 let _api;
-let _events;
+let _events = new Map();
+let _clientId;
+//let _callbacks = new Map();
 
 export async function open(api = `${server_url}/api`) {
   if (!_api) {
     _api = api;
   }
-  if (!_events) {
+  if (!_clientId) {
+    _clientId = generarUUID();
+  }
+  if (_events.size == 0) {
     for (const t of tablas) {
-      const url = `${_api}/${t.name}/event`;
+      const url = `${_api}/${t.name}/${_clientId}`;
       console.log('escuchando eventos de', t.name);
       const es = new EventSourcePolyfill(url, options);
       es.onmessage = (e) => {
         const tmp = JSON.parse(e.data);
         console.log('evento:', tmp);
         if (!!tmp.event) {
-          const { event, catalogo, data } = tmp;
+          const { event, tabla, data } = tmp;
           switch (event) {
             case 'create':
-              add(catalogo, data);
+              add(tabla, data);
               break;
             case 'update':
-              update(catalogo, id, data);
+              update(tabla, id, data);
               break;
             case 'remove':
-              remove(catalogo, id);
+              remove(tabla, id);
               break;
             default:
               console.log('evento no soportado', tmp);
           }
+          bus.emit('change-' + tabla, { reload: true });
         }
       };
+      if (!_events.get(t.name)) {
+        _events.set(t.name, es);
+      }
     }
   }
   if (!_db) {
@@ -53,7 +64,7 @@ export async function open(api = `${server_url}/api`) {
     });
     console.log('open', 'db inicializada');
   }
-  return _db;
+  //return _db;
 }
 export async function download(tabla) {
   const tmp = await fetch(`${_api}/${tabla}`, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json());
@@ -98,21 +109,10 @@ export async function clear(tabla) {
   await _db.clear(tabla);
 }
 
-/*
-//
-//https://github.com/febkosq8/local-save/
-//
-import LocalSave from '@febkosq8/local-save'
-export function open() {
-  if (!localSave) {
-    localSave = new LocalSave({
-      dbName: 'vue',
-      //encryptionKey: "MyRandEncryptKeyThatIs32CharLong", // Encryption key for data
-      categories: ['aboutData', 'welcomeData'], // Define categories for data storage
-      //expiryThreshold: 14, // Clear data older than 14 days
-    })
-  }
-  return localSave
+export function generarUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0;
+    var v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
-export let localSave = false
-*/

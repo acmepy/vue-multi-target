@@ -1,4 +1,3 @@
-/* global process */
 import { app } from 'electron';
 import { instalarWin, desInstalarWin } from './registro.js';
 

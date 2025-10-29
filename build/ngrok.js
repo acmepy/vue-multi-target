@@ -8,9 +8,9 @@ import ngrok from 'ngrok';
   // si ya tenías un túnel corriendo y quieres "listarlos", la librería también tiene utilidades
   // (ver docs de la versión que uses)
 
-  upsertEnvVar('./.env', 'VITE_SERVER_URL', url.replace('https://', ''));
-  upsertEnvVar('./electron/.env', 'SERVER_URL', url.replace('https://', ''));
-  upsertEnvVar('./cordova/www/js/env.js', 'SERVER_URL', `'${url.replace('https://', '')}',`, ':');
+  upsertEnvVar('./.env', 'VITE_SERVER_URL', url);
+  upsertEnvVar('./electron/.env', 'SERVER_URL', url);
+  upsertEnvVar('./cordova/www/js/env.js', '  SERVER_URL', `'${url}',`, ':');
 })();
 
 function upsertEnvVar(file, key, value, delimitador = '=') {
