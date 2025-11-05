@@ -2,7 +2,7 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import bus from '@/utils/bus';
 import { openDB } from 'idb';
-import tablas from '@/db/tablas';
+import tables from '@/db/tables';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const options = { headers: { 'ngrok-skip-browser-warning': 'true' }, heartbeatTimeout: 120000 };
@@ -22,7 +22,7 @@ export async function open(api = `${SERVER_URL}/api`) {
     _clientId = generarUUID();
   }
   if (_events.size == 0) {
-    for (const t of tablas) {
+    for (const t of tables) {
       const url = `${_api}/${t.name}/${_clientId}`;
       console.log('escuchando eventos de', t.name);
       const es = new EventSourcePolyfill(url, options);
@@ -30,21 +30,21 @@ export async function open(api = `${SERVER_URL}/api`) {
         const tmp = JSON.parse(e.data);
         console.log('evento:', tmp);
         if (!!tmp.event) {
-          const { event, tabla, data } = tmp;
+          const { event, table, data } = tmp;
           switch (event) {
             case 'create':
-              add(tabla, data);
+              add(table, data);
               break;
             case 'update':
-              update(tabla, id, data);
+              update(table, id, data);
               break;
             case 'remove':
-              remove(tabla, id);
+              remove(table, id);
               break;
             default:
               console.log('evento no soportado', tmp);
           }
-          bus.emit('change-' + tabla, { reload: true });
+          bus.emit('change-' + table, { reload: true });
         }
       };
       if (!_events.get(t.name)) {
@@ -55,7 +55,7 @@ export async function open(api = `${SERVER_URL}/api`) {
   if (!_db) {
     _db = await openDB(db_name, 1, {
       upgrade(db) {
-        for (const t of tablas) {
+        for (const t of tables) {
           if (!db.objectStoreNames.contains(t.name)) {
             db.createObjectStore(t.name, t.key);
           }
@@ -66,47 +66,47 @@ export async function open(api = `${SERVER_URL}/api`) {
   }
   //return _db;
 }
-export async function download(tabla) {
-  const tmp = await fetch(`${_api}/${tabla}`, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json());
-  add(tabla, tmp);
+export async function download(table) {
+  const tmp = await fetch(`${_api}/${table}`, options).then((r) => r.json());
+  if (tmp.length > 0) add(table, tmp);
   return tmp;
 }
 
-export async function getAll(tabla) {
-  let tmp = await _db.getAll(tabla);
+export async function getAll(table) {
+  let tmp = await _db.getAll(table);
   if (tmp.length == 0) {
-    tmp = download(tabla);
+    tmp = download(table);
   }
   return tmp;
 }
 
-export async function get(tabla, id) {
-  return _db.get(tabla, id);
+export async function get(table, id) {
+  return _db.get(table, id);
 }
 
-export async function add(tabla, data) {
+export async function add(table, data) {
   if (!Array.isArray(data)) {
     data = [data];
   }
   for (const d of data) {
-    await _db.put(tabla, { ...d });
+    await _db.put(table, { ...d });
   }
 }
 
-export async function update(tabla, id, updates) {
-  const existing = await get(tabla, id);
+export async function update(table, id, updates) {
+  const existing = await get(table, id);
   if (!existing) return;
   const updated = { ...existing, ...updates };
-  await _db.put(tabla, updated);
+  await _db.put(table, updated);
   return updated;
 }
 
-export async function remove(tabla, id) {
-  await _db.delete(tabla, id);
+export async function remove(table, id) {
+  await _db.delete(table, id);
 }
 
-export async function clear(tabla) {
-  await _db.clear(tabla);
+export async function clear(table) {
+  await _db.clear(table);
 }
 
 export function generarUUID() {

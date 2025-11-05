@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+//import bodyParser from 'body-parser';
 
 import api from './routes/api.js';
 import push from './routes/push.js';
@@ -15,7 +15,8 @@ const distPath = path.resolve(__dirname, '../dist');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(express.json());
 
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '/dist/favicon.ico'));

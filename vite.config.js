@@ -30,16 +30,8 @@ export default defineConfig({
         display: 'standalone',
         lang: 'es',
         icons: [
-          {
-            src: '/app/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/app/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
+          { src: '/app/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/app/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
         ],
       },
       workbox: {

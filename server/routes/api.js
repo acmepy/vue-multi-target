@@ -3,9 +3,9 @@ import express from 'express';
 const router = express.Router();
 const sseSubscriptions = new Map();
 const data = [
-  { tabla: 'about', data: [{ id: 0, text: 'This is an about page' }] },
+  { table: 'about', data: [{ id: 0, text: 'This is an about page' }] },
   {
-    tabla: 'welcome',
+    table: 'welcome',
     data: [
       {
         id: 0,
@@ -36,9 +36,9 @@ const data = [
   },
 ];
 
-router.get('/:tabla', (req, res) => {
-  const { tabla } = req.params;
-  const d = data.find((d) => d.tabla == tabla);
+router.get('/:table', (req, res) => {
+  const { table } = req.params;
+  const d = data.find((d) => d.table == table);
   setTimeout(() => {
     res.json([d.data[0]]);
   }, 2000);
@@ -48,21 +48,21 @@ router.get('/:tabla', (req, res) => {
       const tmp = d.data[dx];
       setTimeout(() => {
         for (const [id, res] of sseSubscriptions) {
-          res.write(`data: ${JSON.stringify({ ok: true, event: 'create', tabla, data: [tmp] })}\n\n`);
+          res.write(`data: ${JSON.stringify({ ok: true, event: 'create', table, data: [tmp] })}\n\n`);
         }
       }, 1500 * dx);
     }
   }
 });
 
-router.get('/:tabla/:clientId', (req, res) => {
+router.get('/:table/:clientId', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const { tabla, clientId } = req.params;
-  const id = tabla + ':' + clientId;
+  const { table, clientId } = req.params;
+  const id = table + ':' + clientId;
   res.locals.id = id;
   res.locals.interval = setInterval(() => {
     res.write(`data: ${JSON.stringify({ ok: true })}\n\n`);
